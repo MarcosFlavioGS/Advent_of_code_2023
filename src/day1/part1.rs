@@ -23,11 +23,25 @@ fn read_file(path: &str) -> Result<Vec<String>, std::io::Error> {
 	Ok(result)
 }
 
-fn get_digits(vec: &Vec<String>) -> Vec<usize> {
-	let result: Vec<usize> = Vec::new();
+fn get_digits(vec: &Vec<String>) -> Vec<String> {
+	let mut result: Vec<String> = Vec::new();
+	let mut string: String;
 
 	for str in vec.iter() {
-		println!("{}", str);
+		string = String::new();
+		for char in str.chars() {
+			if char.is_numeric() {
+				string.push(char);
+				break;
+			}
+		}
+		for char in str.chars().rev() {
+			if char.is_numeric() {
+				string.push(char);
+				break;
+			}
+		}
+		result.push(string.clone());
 	}
 
 	result
@@ -35,7 +49,7 @@ fn get_digits(vec: &Vec<String>) -> Vec<usize> {
 
 pub fn get_calibration_digit() -> usize {
 	let mut str_vec: Vec<String>;
-	let 	num_vec: Vec<usize>;
+	let 	num_vec: Vec<String>;
 
 	str_vec = Vec::new();
 	if let Ok(res) = read_file("inputs/day1.txt") {
@@ -44,11 +58,5 @@ pub fn get_calibration_digit() -> usize {
 
 	num_vec = get_digits(&str_vec);
 
-
-	let sum: usize = num_vec.iter().sum();
-
-	// TODO: Get the digits into a Vec<usize>
-
-	// TODO: Return the sum of the Vec<>
-	sum
+	num_vec.iter().map(|str| str.parse::<usize>().unwrap()).sum()
 }
